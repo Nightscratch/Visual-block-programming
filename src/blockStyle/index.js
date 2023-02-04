@@ -3,7 +3,7 @@ import ifelse from './ifelse/ifelse'
 import start from './start/start'
 import text from './text/text'
 import number from './number/number'
-
+import equalTo from './equalTo/equalTo'
 
 
 
@@ -12,5 +12,6 @@ export default{
     ifelse,
     start,
     text,
-    number
+    number,
+    equalTo
 }

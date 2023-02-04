@@ -65,7 +65,6 @@ const loadFile = (blocksDataToLoad,blocksData) => {
             debugger
         }
     }
-    setBlocksData(blocksDataToChange)
 }
 
 export default loadFile

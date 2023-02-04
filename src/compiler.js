@@ -5,10 +5,9 @@ const compileBlock = (blockData,blocksId)=>{
     let selfBlockStyle =blockStyle[ blockData.type]
     let inputs = {}
     for (const inputkey in blockData.inputs) {
-        console.log(inputkey)
         let inputData = blockData.inputs[inputkey]
         if (inputData.value) {
-            inputs[inputkey] = compileBlock(blocksData[inputData.value.data],inputData.value.data)
+            inputs[inputkey] = compileBlock(blocksData[inputData.value.data],inputData.value.data,false)
         }else{
             if (inputkey == 'next') {
                 inputs[inputkey] = ''

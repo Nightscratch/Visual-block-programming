@@ -2,7 +2,7 @@ import { zoom } from "./zoom";
 let codeSpace = document.getElementById('app')
 let zoomSpace = document.getElementById('zoom')
 const dragElement = (elmnt,dragOver,event=false)=>{
-    console.log("55")
+    //console.log("55")
     let offset;
     let dragMouseDown=(e)=>{
         if (e.target != elmnt && e.target.getAttribute('dragId') != elmnt.getAttribute('blockId')) {

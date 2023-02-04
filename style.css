@@ -67,9 +67,6 @@
     min-height: 20px;
     min-width: 20px;
 }
-.input:hover{
-    background-color: rgb(4, 255, 0);
-}
 input{
     width: 50px;
     border-radius: 20px;

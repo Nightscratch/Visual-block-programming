@@ -15,7 +15,7 @@ const saveFile = (blocksData)=>{
         file[blockId].x = blockDom.style.left
         file[blockId].y = blockDom.style.top
     }
-    console.log(file)
+    return file
 }
 
 export default saveFile

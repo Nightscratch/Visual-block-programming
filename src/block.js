@@ -24,6 +24,9 @@ var menuDom = null;
  */
 export const getMinChild = (targetBlockId, inputId) => {
     let child = targetBlockId
+    if (!blocksData[child].inputs[inputId]) {
+        return targetBlockId
+    }
     while (blocksData[child].inputs[inputId].value) {
         child = blocksData[child].inputs[inputId].value.data
     }
@@ -67,7 +70,7 @@ export const setContext = (e, domId) => {
     if (e.target.getAttribute('blockid') != domId && e.target.getAttribute('dragId') != domId) {
         return null;
     }
-    debugger
+
     //let menuDom = menuDom//document.getElementById('menu')
     menuDom.style.display = 'block'
     menuDom.style.top = (e.clientY + 5) + "px";
@@ -137,7 +140,7 @@ export const connectBlocks = (dragBlockId) => {
         return a.distance - b.distance
     });
     let NowCanConnectBlock = NowCanConnectBlocks[0]
-
+    debugger
     if (NowCanConnectBlock.type == 0) {
         let {
             targetBlockId,
@@ -153,8 +156,8 @@ export const connectBlocks = (dragBlockId) => {
 
             if (targetBlockInputIndex == 'next') {
 
-                console.log(blocksData[targetBlockId].inputs[Object.keys(blocksData[targetBlockId].inputs)[0]])
-                debugger
+                //console.log(blocksData[targetBlockId].inputs[Object.keys(blocksData[targetBlockId].inputs)[0]])
+
                 let defaultInput = blocksData[dragBlockId].defaultInput
                 let inpid = defaultInput
                 document.querySelector(`[prentId="${minChildId}"][inputId="${inpid}"]`).appendChild(oldBlockDom)
@@ -169,17 +172,38 @@ export const connectBlocks = (dragBlockId) => {
                     setDragOut(e, oldBlockId, minChildId, targetBlockInputIndex)
                 }
             } else {
-                let inpid = 'next'
-                document.querySelector(`[prentId="${minChildId}"][inputId="${inpid}"]`).appendChild(oldBlockDom)
-                blocksData[minChildId].inputs[inpid].value = { data: oldBlockId, type: 1 }
+                if (blocksData[oldBlockId].defaultInput) {
+                    if (blocksData[dragBlockId].defaultInput) {
+                        let inpid = 'next'
+                        document.querySelector(`[prentId="${minChildId}"][inputId="${inpid}"]`).appendChild(oldBlockDom)
+                        blocksData[minChildId].inputs[inpid].value = { data: oldBlockId, type: 1 }
 
-                blocksData[oldBlockId].prent = {
-                    inputId: inpid,
-                    blockId: minChildId
+                        blocksData[oldBlockId].prent = {
+                            inputId: inpid,
+                            blockId: minChildId
+                        }
+                        oldBlockDom.onmousedown = (e) => {
+                            setDragOut(e, oldBlockId, minChildId, inpid)
+                        }
+                    } else {
+                        oldBlockDom.style.top = setPostiton(oldBlockDom, 'y')+20 + "px";
+                        oldBlockDom.style.left = setPostiton(oldBlockDom, 'x')+20 + "px";
+                        codeSpace.appendChild(oldBlockDom)
+                        delete blocksData[oldBlockId].prent
+                        oldBlockDom.setAttribute('class', 'block')
+                        dragElement(oldBlockDom, connectBlocks)
+
+                    }
+
+                } else {
+                    oldBlockDom.style.top = setPostiton(oldBlockDom, 'y')+20 + "px";
+                    oldBlockDom.style.left = setPostiton(oldBlockDom, 'x')+20 + "px";
+                    codeSpace.appendChild(oldBlockDom)
+                    delete blocksData[oldBlockId].prent
+                    oldBlockDom.setAttribute('class', 'block')
+                    dragElement(oldBlockDom, connectBlocks)
                 }
-                oldBlockDom.onmousedown = (e) => {
-                    setDragOut(e, oldBlockId, minChildId, inpid)
-                }
+
             }
         }
         blocksData[targetBlockId].inputs[targetBlockInputIndex].value = {
@@ -203,8 +227,9 @@ export const connectBlocks = (dragBlockId) => {
             dragBlockInputId
         } = NowCanConnectBlock
         let dragBlockInputDom = document.querySelector(`[prentId="${dragBlockId}"][inputId="${dragBlockInputId}"]`)
-        debugger
+
         dragBlockInputDom.append(targetBlockDom)
+
 
         blocksData[targetBlockId].prent = {
             blockId: dragBlockId,
@@ -218,7 +243,9 @@ export const connectBlocks = (dragBlockId) => {
         targetBlockDom.onmousedown = (e) => {
             setDragOut(e, targetBlockId, dragBlockId, dragBlockInputId)
         }
-        debugger
+
+
+
 
     }
 
@@ -243,7 +270,7 @@ const createBlockDomById = (type, id) => {
  * @param { String } type 积木类型
  * @return { HTMLDivElement } 创建积木
  */
-const createBlockDom = (type,id=Object.keys(blocksData).length) => {
+const createBlockDom = (type, id = Object.keys(blocksData).length) => {
     let dom = document.createElement("div");
     dom.setAttribute('blockId', `${id}`)
     dom.setAttribute('class', 'block')
@@ -269,7 +296,7 @@ export const addInputBlock = (type, id = Object.keys(blocksData).length) => {
  * @param { String } id 积木 id
  */
 export const addBlock = (type, changeBlocksData = true, id) => {
-    debugger
+
     let dom;
     if (changeBlocksData) {
         dom = createBlockDom(type)
@@ -360,7 +387,7 @@ const copyBlock = (targetBlockId) => {
 
     newBlockDom.style.left = setPostiton(targetBlockToCopy, 'x') + 10 + 'px'
     newBlockDom.style.top = setPostiton(targetBlockToCopy, 'y') + 10 + 'px'
-    debugger
+
     codeSpace.appendChild(newBlockDom)
     for (const blockIdToCopy of data) {
         let toCopyData = blocksData[blockIdToCopy]

@@ -8,21 +8,17 @@ export default {
     },
     inputs() {
         return {
-            'arg1': {
+            'arg': {
                 type:0,
                 value: null
             }  ,
-            'arg2': {
-                type:0,
-                value: null
-            },        
             'next': {
                 type:1,
                 value: null
-            },  
+            },          
         }
     },
     compiler(inputs,blockData){
-        return `move(${inputs.arg1},${inputs.arg2});${inputs.next}`
+        return `Math.abs(${inputs.arg});${inputs.next}`
     }
 }
