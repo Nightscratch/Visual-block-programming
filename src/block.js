@@ -517,7 +517,7 @@ export const loadFile = (projectJson) => {
  * @exports saveFile
  */
 export const saveFile = () => {
-    file.saveFile(blocksData)
+    return file.saveFile(blocksData)
 }
 /**
  * @exports compile
