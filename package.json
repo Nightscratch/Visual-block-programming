@@ -3,18 +3,14 @@
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
-  "devDependencies": {
-    "rollup-plugin-string": "^3.0.0"
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "docs": "jsdoc -c jsdoc.json"
+    "docs": "jsdoc -c jsdoc.json",
+    "build": "vite build",
+    "start" : "vite"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "rfdc": "^1.3.0"
-  }
+  "author": "NIGHTS",
+  "license": "MIT",
+  "description": ""
 }
