@@ -174,7 +174,7 @@ export const connectBlocks = (dragBlockId) => {
             } else {
                 if (blocksData[oldBlockId].defaultInput) {
                     if (blocksData[dragBlockId].defaultInput) {
-                        let inpid = 'next'
+                        let inpid = blocksData[dragBlockId].defaultInput
                         document.querySelector(`[prentId="${minChildId}"][inputId="${inpid}"]`).appendChild(oldBlockDom)
                         blocksData[minChildId].inputs[inpid].value = { data: oldBlockId, type: 1 }
 
@@ -203,7 +203,7 @@ export const connectBlocks = (dragBlockId) => {
                     oldBlockDom.setAttribute('class', 'block')
                     dragElement(oldBlockDom, connectBlocks)
                 }
-
+                debugger
             }
         }
         blocksData[targetBlockId].inputs[targetBlockInputIndex].value = {
