@@ -18,3 +18,7 @@ npm run start
 ```
 npm run build
 ```
+ 
+ ## 修改积木 / 增加积木
+
+ 在`./src/blockStyle`搞
