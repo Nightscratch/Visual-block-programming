@@ -1,6 +1,6 @@
 # Visual block programming
 
-一个轻量的可视化编程语言，类似[blockly](https://github.com/google/blockly)
+一个可视化编程语言，类似[blockly](https://github.com/google/blockly)。压缩后 13kb
 
 ![](https://t.gmit.vip/2023/02/04/palz5z.png)
 
