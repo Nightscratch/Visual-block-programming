@@ -1,6 +1,6 @@
 # Visual block programming
 
-一个轻量的可视化编程语言，类似[blockly](https://github.com/google/blockly)
+一个可视化编程语言，类似[blockly](https://github.com/google/blockly)。压缩后仅 13kb
 
 ![](https://t.gmit.vip/2023/02/04/palz5z.png)
 
@@ -14,11 +14,11 @@
 npm run start
 ```
 
-编译
+build
 ```
 npm run build
 ```
  
  ## 修改积木 / 增加积木
 
- 在`./src/blockStyle`搞
+ 在`./src/blockStyle`，积木编译成其他语言也是在这个目录里
