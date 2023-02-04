@@ -49,7 +49,8 @@
       console.log(block.compile())
     })
     document.getElementById("saveFile").addEventListener("click", () => {
-      console.log( block.saveFile())
+      alert('请按F12打开控制台，查看文件')
+      console.log("积木文件",block.saveFile())
     })
     document.getElementById("loadFile").addEventListener("click", () => {
       block.loadFile(JSON.parse(prompt("文件json")))
