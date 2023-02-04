@@ -13,6 +13,7 @@
     <div id="zoom">
       <div id="screen" class="screen"></div>
       <div id="app">
+        <div id="first"></div>
       </div>
     </div>
     <div id="sideButton" class="side-button">
@@ -30,8 +31,6 @@
 
   <button id="loadFile">loadFile</button>
 
-  <hr>
-  <textarea id="out" cols="30" rows="10"></textarea>
   <script type="module">
     import { block, zoom } from './src/main.js'
 
@@ -41,17 +40,16 @@
     block.addBlock('ifelse')
     block.addBlock('start')
     block.addBlock('text')
-    block.addBlock('equal')
-
-
+    block.addBlock('equalTo')
+    block.addBlock('number')
 
 
 
     document.getElementById('compiler').addEventListener('click', () => {
-      document.getElementById('out').innerText=block.compile()
+      console.log(block.compile())
     })
     document.getElementById("saveFile").addEventListener("click", () => {
-      document.getElementById('out').innerText=(JSON.stringify(block.saveFile())) //
+      console.log( block.saveFile())
     })
     document.getElementById("loadFile").addEventListener("click", () => {
       block.loadFile(JSON.parse(prompt("文件json")))
