@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./style.css">
+  <title>Visual Editor</title>
+</head>
+
+<body>
+  <div>
+    <div id="zoom">
+      <div id="screen" class="screen"></div>
+      <div id="app">
+      </div>
+    </div>
+    <div id="sideButton" class="side-button">
+      <button id="zoomOut">放大</button>
+      <button id="zoomIn">缩小</button>
+    </div>
+  </div>
+  <div id="menu" style="display: none;" class="menu">
+    <button id="menuDelet">删除</button>
+    <hr>
+    <button id="menuCopy">复制</button>
+  </div>
+  <button id="compiler">运行</button>
+  <button id="saveFile">saveFile</button>
+
+  <button id="loadFile">loadFile</button>
+
+  <script type="module">
+    import { block, zoom } from './src/main.js'
+
+    block.init(document.getElementById('app'))
+
+    block.addBlock('move')
+    block.addBlock('ifelse')
+    block.addBlock('start')
+    block.addBlock('text')
+    block.addBlock('number')
+
+
+
+    document.getElementById('compiler').addEventListener('click', () => {
+      block.compile()
+    })
+    document.getElementById("saveFile").addEventListener("click", () => {
+      block.saveFile()
+    })
+    document.getElementById("loadFile").addEventListener("click", () => {
+      block.loadFile(JSON.parse(prompt("文件json")))
+    })
+  </script>
+</body>
+
+</html>
