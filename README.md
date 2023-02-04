@@ -14,7 +14,7 @@
 npm run start
 ```
 
-编译
+build
 ```
 npm run build
 ```
