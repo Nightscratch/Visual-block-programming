@@ -12,6 +12,7 @@
     white-space:nowrap;
 }
 .input{
+    border-radius: 5px;
     background-color: rgb(255, 255, 255);
     min-height: 20px;
     min-width: 20px;
@@ -70,7 +71,14 @@
 input{
     width: 50px;
     border-radius: 20px;
+    background-color: rgb(255, 0, 0);
+    color: white;
 }
 .report-only{
     border-radius: 5px;
+}
+#porDom{
+    width: 20px;
+    height: 20px;
+    background-color: rgba(0, 0, 0, 0.352);
 }

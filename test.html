@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        let obj = {ssss:999};
+        let listen = false
+        let proxy = new Proxy(obj, {
+            get(target, key) {
+                if(listen){
+                    alert('你打开了控制台')
+                }
+                return target[key]
+            },
+        });
+        console.log(proxy.ssss)
+        listen = true
+    </script>
+</body>
+
+</html>

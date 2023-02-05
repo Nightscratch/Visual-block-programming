@@ -3,6 +3,7 @@ import html from './html.html?raw'
 export default {
     isTopLevel:true,
     defaultInput:'next',
+    topOnly:true,
 
     html(blockId){
         return html.replace(/blockId/g,blockId)

@@ -15,7 +15,7 @@ var blocksData = {};
 var menu = {};
 /** @constant { HTMLElement } menuDom 菜单 html 对象 */
 var menuDom = null;
-
+var porDom = null;
 /**
  * @function getMinChild 获取积木输入框的最子元素
  * @param { Number } targetBlockId 积木Id 
@@ -86,7 +86,10 @@ export const setContext = (e, domId) => {
  * @function connectBlocks 检查积木可否连接其他积木并连接
  * @param { Number } dragBlockId 积木Id
  */
-export const connectBlocks = (dragBlockId) => {
+export const connectBlocks = (dragBlockId, connect = true) => {
+    if (connect) {
+        porDom.remove()
+    }
     let NowCanConnectBlocks = []
     let dragBlockDom = getBlockById(dragBlockId)
     for (let targetBlockId in blocksData) {
@@ -95,29 +98,36 @@ export const connectBlocks = (dragBlockId) => {
             continue
         }
         for (const dragBlockInputId in blocksData[dragBlockId].inputs) {
-            if (blocksData[dragBlockId].inputs[dragBlockInputId].type == 1 && !blocksData[targetBlockId].prent) {
-                let targetBlockDom = getBlockById(targetBlockId)
-                let dragBlockInputDom = document.querySelector(`[prentId="${dragBlockId}"][inputId="${dragBlockInputId}"]`)
-                let distanceX = Math.abs(targetBlockDom.getBoundingClientRect().left - dragBlockInputDom.getBoundingClientRect().left)
-                let distanceY = Math.abs(targetBlockDom.getBoundingClientRect().top - dragBlockInputDom.getBoundingClientRect().top)
-                let type = 1
-
-                if (distanceY < blockMinSpace && distanceX < blockMinSpace) {
-                    NowCanConnectBlocks.push({
-                        distance: distanceX + distanceY,
-                        targetBlockId,
-                        targetBlockDom,
-                        dragBlockInputId,
-                        type
-                    })
-                }
+            if (targetBlockData.topOnly && blocksData[dragBlockId].inputs[dragBlockInputId].type == 1) {
+                continue
             }
+            if (blocksData[dragBlockId].inputs[dragBlockInputId].type != 1 || blocksData[targetBlockId].prent) {
+                continue
+            }
+            let targetBlockDom = getBlockById(targetBlockId)
+            let dragBlockInputDom = document.querySelector(`[prentId="${dragBlockId}"][inputId="${dragBlockInputId}"]`)
+            let distanceX = Math.abs(targetBlockDom.getBoundingClientRect().left - dragBlockInputDom.getBoundingClientRect().left)
+            let distanceY = Math.abs(targetBlockDom.getBoundingClientRect().top - dragBlockInputDom.getBoundingClientRect().top)
+            let type = 1
 
+            if (distanceY < blockMinSpace && distanceX < blockMinSpace) {
+                NowCanConnectBlocks.push({
+                    distance: distanceX + distanceY,
+                    targetBlockId,
+                    targetBlockDom,
+                    dragBlockInputId,
+                    type
+                })
+            }
         }
         for (const targetBlockInputIndex in targetBlockData.inputs) {
             if (!blocksData[dragBlockId].defaultInput && targetBlockData.inputs[targetBlockInputIndex].type == 1) {
                 continue
             }
+            if (blocksData[dragBlockId].topOnly && targetBlockData.inputs[targetBlockInputIndex].type == 1) {
+                continue
+            }
+
             let targetBlockInputDom = document.querySelector(`[prentId="${targetBlockId}"][inputId="${targetBlockInputIndex}"]`)
             let distanceX = Math.abs(targetBlockInputDom.getBoundingClientRect().left - dragBlockDom.getBoundingClientRect().left)
             let distanceY = Math.abs(targetBlockInputDom.getBoundingClientRect().top - dragBlockDom.getBoundingClientRect().top)
@@ -134,13 +144,17 @@ export const connectBlocks = (dragBlockId) => {
     }
 
     if (NowCanConnectBlocks.length == 0) {
+        porDom.remove()
         return null
     }
     NowCanConnectBlocks.sort((a, b) => {
         return a.distance - b.distance
     });
     let NowCanConnectBlock = NowCanConnectBlocks[0]
-    debugger
+    /*if (! connect) {
+        return NowCanConnectBlock
+    }*/
+
     if (NowCanConnectBlock.type == 0) {
         let {
             targetBlockId,
@@ -153,58 +167,110 @@ export const connectBlocks = (dragBlockId) => {
             let oldBlockDom = getBlockById(oldBlockId)
             let minChildId = getMinChild(dragBlockId, 'next')
 
-
             if (targetBlockInputIndex == 'next') {
-
                 //console.log(blocksData[targetBlockId].inputs[Object.keys(blocksData[targetBlockId].inputs)[0]])
 
                 let defaultInput = blocksData[dragBlockId].defaultInput
-                let inpid = defaultInput
-                document.querySelector(`[prentId="${minChildId}"][inputId="${inpid}"]`).appendChild(oldBlockDom)
-                blocksData[minChildId].inputs[inpid].value = { data: oldBlockId, type: 1 }
 
-                blocksData[targetBlockId].inputs[targetBlockInputIndex].value = null
-                blocksData[oldBlockId].prent = {
-                    inputId: targetBlockInputIndex,
-                    blockId: minChildId
+                if (!connect) {
+                    targetBlockInputDom.insertBefore(porDom, targetBlockInputDom.childNodes[0])
+                    return true
                 }
-                oldBlockDom.onmousedown = (e) => {
-                    setDragOut(e, oldBlockId, minChildId, targetBlockInputIndex)
+
+                if (defaultInput != 'next' && !blocksData[dragBlockId].inputs[defaultInput].value) {
+                    // 默认输入口无积木
+                    document.querySelector(`[prentId="${dragBlockId}"][inputId="${defaultInput}"]`).appendChild(oldBlockDom)
+                    blocksData[dragBlockId].inputs[defaultInput].value ={
+                        type:1,
+                        data:oldBlockId
+                    }
+                    blocksData[oldBlockId].prent = {
+                        inputId: defaultInput,
+                        blockId: dragBlockId
+                    }
+                    oldBlockDom.onmousedown = (e) => {
+                        setDragOut(e, oldBlockId, dragBlockId, targetBlockInputIndex)
+                    }
+                } else {
+                    // 默认输入口有积木
+                    document.querySelector(`[prentId="${minChildId}"][inputId="next"]`).appendChild(oldBlockDom)
+                    blocksData[minChildId].inputs.next.value = {
+                        type:1,
+                        data:oldBlockId
+                    }
+                    blocksData[oldBlockId].prent = {
+                        inputId: 'next',
+                        blockId: minChildId
+                    }
+                    oldBlockDom.onmousedown = (e) => {
+                        setDragOut(e, oldBlockId, minChildId, targetBlockInputIndex)
+                    }
                 }
             } else {
                 if (blocksData[oldBlockId].defaultInput) {
                     if (blocksData[dragBlockId].defaultInput) {
-                        let inpid = blocksData[dragBlockId].defaultInput
-                        document.querySelector(`[prentId="${minChildId}"][inputId="${inpid}"]`).appendChild(oldBlockDom)
-                        blocksData[minChildId].inputs[inpid].value = { data: oldBlockId, type: 1 }
+
+                        if (!connect) {
+                            targetBlockInputDom.insertBefore(porDom, targetBlockInputDom.childNodes[0])
+                            return true
+                        }
+                        let defaultInput = blocksData[dragBlockId].defaultInput
+                        let prentId;
+                        if (defaultInput == 'next') {
+                            prentId = minChildId//dragBlockId
+                        } else {
+                            if (blocksData[dragBlockId].inputs[defaultInput].value) {
+                                // 默认输入有积木
+                                prentId = minChildId
+                                defaultInput = 'next'
+                            }else{
+                                // 默认输入唔积木
+                                prentId = dragBlockId
+                            }
+                            
+                        }
+                        document.querySelector(`[prentId="${prentId}"][inputId="${defaultInput}"]`).appendChild(oldBlockDom)
+
+                        blocksData[prentId].inputs[defaultInput].value = { data: oldBlockId, type: 1 }
 
                         blocksData[oldBlockId].prent = {
-                            inputId: inpid,
-                            blockId: minChildId
+                            inputId: defaultInput,
+                            blockId: prentId
                         }
                         oldBlockDom.onmousedown = (e) => {
-                            setDragOut(e, oldBlockId, minChildId, inpid)
+                            setDragOut(e, oldBlockId, prentId, defaultInput)
                         }
+                        debugger
                     } else {
-                        oldBlockDom.style.top = setPostiton(oldBlockDom, 'y')+20 + "px";
-                        oldBlockDom.style.left = setPostiton(oldBlockDom, 'x')+20 + "px";
+                        if (!connect) {
+                            targetBlockInputDom.append(porDom)
+                            return true
+                        }
+                        oldBlockDom.style.top = setPostiton(oldBlockDom, 'y') + 20 + "px";
+                        oldBlockDom.style.left = setPostiton(oldBlockDom, 'x') + 20 + "px";
                         codeSpace.appendChild(oldBlockDom)
                         delete blocksData[oldBlockId].prent
                         oldBlockDom.setAttribute('class', 'block')
                         dragElement(oldBlockDom, connectBlocks)
-
                     }
-
                 } else {
-                    oldBlockDom.style.top = setPostiton(oldBlockDom, 'y')+20 + "px";
-                    oldBlockDom.style.left = setPostiton(oldBlockDom, 'x')+20 + "px";
+                    if (!connect) {
+                        targetBlockInputDom.append(porDom)
+                        return true
+                    }
+                    oldBlockDom.style.top = setPostiton(oldBlockDom, 'y') + 20 + "px";
+                    oldBlockDom.style.left = setPostiton(oldBlockDom, 'x') + 20 + "px";
                     codeSpace.appendChild(oldBlockDom)
                     delete blocksData[oldBlockId].prent
                     oldBlockDom.setAttribute('class', 'block')
                     dragElement(oldBlockDom, connectBlocks)
                 }
-                debugger
+
             }
+        }
+        if (!connect) {
+            targetBlockInputDom.append(porDom)
+            return true
         }
         blocksData[targetBlockId].inputs[targetBlockInputIndex].value = {
             type: 1,
@@ -227,7 +293,10 @@ export const connectBlocks = (dragBlockId) => {
             dragBlockInputId
         } = NowCanConnectBlock
         let dragBlockInputDom = document.querySelector(`[prentId="${dragBlockId}"][inputId="${dragBlockInputId}"]`)
-
+        if (!connect) {
+            dragBlockInputDom.append(porDom)
+            return true
+        }
         dragBlockInputDom.append(targetBlockDom)
 
 
@@ -243,12 +312,7 @@ export const connectBlocks = (dragBlockId) => {
         targetBlockDom.onmousedown = (e) => {
             setDragOut(e, targetBlockId, dragBlockId, dragBlockInputId)
         }
-
-
-
-
     }
-
 
     return null
 }
@@ -316,7 +380,8 @@ export const addBlock = (type, changeBlocksData = true, id) => {
             type,
             inputs: blockStyle[type].inputs(),
             isTopLevel: blockStyle[type].isTopLevel,
-            defaultInput: blockStyle[type].defaultInput
+            defaultInput: blockStyle[type].defaultInput,
+            topOnly: blockStyle[type].topOnly
         }
     }
     return dom
@@ -489,7 +554,9 @@ export const init = (codeSpaceDom) => {
     codeSpace = codeSpaceDom //document.getElementById('app')
     blocksData = {}
     menu = {}
-
+    porDom = document.getElementById('porDom');
+    porDom.remove()
+    console.log(porDom)
     codeSpace.onmousedown = (e) => {
         if (e.target.getAttribute('id') == 'menuItem') {
             return null;
