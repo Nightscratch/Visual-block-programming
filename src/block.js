@@ -104,6 +104,9 @@ export const connectBlocks = (dragBlockId, connect = true) => {
             if (blocksData[dragBlockId].inputs[dragBlockInputId].type != 1 || blocksData[targetBlockId].prent) {
                 continue
             }
+            if (dragBlockInputId != 'next' && blocksData[dragBlockId].inputs[dragBlockInputId].value) {
+                continue
+            }
             let targetBlockDom = getBlockById(targetBlockId)
             let dragBlockInputDom = document.querySelector(`[prentId="${dragBlockId}"][inputId="${dragBlockInputId}"]`)
             let distanceX = Math.abs(targetBlockDom.getBoundingClientRect().left - dragBlockInputDom.getBoundingClientRect().left)
@@ -203,7 +206,7 @@ export const connectBlocks = (dragBlockId, connect = true) => {
                         blockId: minChildId
                     }
                     oldBlockDom.onmousedown = (e) => {
-                        setDragOut(e, oldBlockId, minChildId, targetBlockInputIndex)
+                        setDragOut(e, oldBlockId, minChildId, 'next')
                     }
                 }
             } else {
