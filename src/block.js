@@ -165,15 +165,13 @@ export const connectBlocks = (dragBlockId, connect = true) => {
             targetBlockInputDom,
         } = NowCanConnectBlock
 
-        if (blocksData[targetBlockId].inputs[targetBlockInputIndex].value) {
-            let oldBlockId = blocksData[targetBlockId].inputs[targetBlockInputIndex].value.data
-            let oldBlockDom = getBlockById(oldBlockId)
-            let minChildId = getMinChild(dragBlockId, 'next')
+        if (blocksData[targetBlockId].inputs[targetBlockInputIndex].value) { // 输入口已有积木
+            let oldBlockId = blocksData[targetBlockId].inputs[targetBlockInputIndex].value.data // 已有积木的ID
+            let oldBlockDom = getBlockById(oldBlockId) // 已有积木的dom
+            let minChildId = getMinChild(dragBlockId, 'next') // 拖动积木的最子积木
 
             if (targetBlockInputIndex == 'next') {
-                //console.log(blocksData[targetBlockId].inputs[Object.keys(blocksData[targetBlockId].inputs)[0]])
-
-                let defaultInput = blocksData[dragBlockId].defaultInput
+                let defaultInput = blocksData[dragBlockId].defaultInput // 拖动积木的默认输入口
 
                 if (!connect) {
                     targetBlockInputDom.insertBefore(porDom, targetBlockInputDom.childNodes[0])
@@ -192,7 +190,7 @@ export const connectBlocks = (dragBlockId, connect = true) => {
                         blockId: dragBlockId
                     }
                     oldBlockDom.onmousedown = (e) => {
-                        setDragOut(e, oldBlockId, dragBlockId, targetBlockInputIndex)
+                        setDragOut(e, oldBlockId, dragBlockId, defaultInput)
                     }
                 } else {
                     // 默认输入口有积木
@@ -243,7 +241,7 @@ export const connectBlocks = (dragBlockId, connect = true) => {
                         oldBlockDom.onmousedown = (e) => {
                             setDragOut(e, oldBlockId, prentId, defaultInput)
                         }
-                        debugger
+                        
                     } else {
                         if (!connect) {
                             targetBlockInputDom.append(porDom)
