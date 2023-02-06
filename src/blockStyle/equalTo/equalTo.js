@@ -16,8 +16,8 @@ export default {
         return `Math.abs(${inputs.arg});${inputs.next}`
     },
     load:{
-        changeDom(blockData,dom,blockId) {
-            debugger
+        initDom(blockData,dom,blockId,firstTime=false) {
+            // firstTime : 当copy时是false，当load是true
             let addItem = (inputName,change=true)=>{
                 let inputDom = document.createElement('template')
                 inputDom.innerHTML = inputHtml.replace(/argId/g, inputName).replace(/blockId/g, blockId)
@@ -27,10 +27,13 @@ export default {
                 
                 dom.querySelector('[id="inputs"]').appendChild(inputDom.content)                
             }
-            dom.querySelector('[id="inputs"]').innerHTML = ''
-            for (let inputName in blockData.inputs) {
-                addItem(inputName,false)
+            if (firstTime) {
+                dom.querySelector('[id="inputs"]').innerHTML = ''
+                for (let inputName in blockData.inputs) {
+                    addItem(inputName,false)
+                }                
             }
+
             
             dom.querySelector('[id="add"]').onclick = () => {
                 addItem(`item_${Object.keys(blockData.inputs).length + 1}`)

@@ -7,8 +7,8 @@ let eventList = []
 const load = (blockId, blocksDataToLoad, dom) => {
     let blockData = blocksDataToLoad[blockId]
     let selfBlockStyle = blockStyle[blockData.type]
-    if (selfBlockStyle.load && selfBlockStyle.load.changeDom) {
-        selfBlockStyle.load.changeDom(blockData,dom)
+    if (selfBlockStyle.load && selfBlockStyle.load.initDom) {
+        selfBlockStyle.load.initDom(blockData,dom)
     }
     
     dom.style.left = blockData.x

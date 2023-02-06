@@ -388,14 +388,14 @@ export const addBlock = (type, changeBlocksData = true, id) => {
             topOnly: blockStyle[type].topOnly,
             self:{}
         }
-        initDom(dom,domId,type)
+        initDom(dom,domId,type,true)
     }
     return dom
 }
 
 const initDom = (dom,domId,type) => {
-    if (blockStyle[type].load && blockStyle[type].load.changeDom) {
-        blockStyle[type].load.changeDom(blocksData[domId],dom,domId)
+    if (blockStyle[type].load && blockStyle[type].load.initDom) {
+        blockStyle[type].load.initDom(blocksData[domId],dom,domId,false)
     }
 }
 
@@ -512,7 +512,7 @@ const copyBlock = (targetBlockId) => {
                 }
             }
             //console.log(newBlockDomToChange,String(Number(blockIdToCopy) + baseId),data.type)
-            initDom(newBlockDomToChange,String(Number(blockIdToCopy) + baseId),data.type)
+            initDom(newBlockDomToChange,String(Number(blockIdToCopy) + baseId),data.type,false)
             newBlockDomToChange.oncontextmenu = (e) => {
                 setContext(e, String(Number(blockIdToCopy) + baseId))
             }

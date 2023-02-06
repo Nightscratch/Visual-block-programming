@@ -26,7 +26,7 @@ export default {
             delete blockData.self.text
             return blockData
         },
-        changeDom(blockData, dom) {
+        initDom(blockData, dom) {
             dom.querySelector('[id="input"]').value = blockData.self.text
             return dom
         }
