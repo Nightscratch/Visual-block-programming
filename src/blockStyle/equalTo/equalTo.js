@@ -42,16 +42,16 @@ export default {
             }
             if (firstTime) {
                 debugger
-                dom.querySelector('[id="inputs"]').innerHTML = ''
+                dom.querySelector(`[id="inputs"][prentId="${blockId}"]`).innerHTML = ''
                 for (let inputName in blockData.inputs) {
                     addItem(inputName,false)
                 }                
             }
 
-            dom.querySelector('[id="add"]').onclick = () => {
+            dom.querySelector(`[id="add"][prentId="${blockId}"]`).onclick = () => {
                 addItem(`item_${Object.keys(blockData.inputs).length + 1}`)
             }
-            dom.querySelector('[id="subtract"]').onclick = (e) => {
+            dom.querySelector(`[id="subtract"][prentId="${blockId}"]`).onclick = (e) => {
                 console.log(e.target)
                 subtractItem()
             }
