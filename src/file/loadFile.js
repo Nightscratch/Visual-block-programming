@@ -7,9 +7,6 @@ let eventList = []
 const load = (blockId, blocksDataToLoad, dom) => {
     let blockData = blocksDataToLoad[blockId]
     let selfBlockStyle = blockStyle[blockData.type]
-    if (selfBlockStyle.load && selfBlockStyle.load.initDom) {
-        selfBlockStyle.load.initDom(blockData,dom)
-    }
     
     dom.style.left = blockData.x
     dom.style.top = blockData.y
@@ -22,6 +19,9 @@ const load = (blockId, blocksDataToLoad, dom) => {
         selfBlockStyle.load.toJson(blockData)
     }
     blocksDataToChange[blockId] = blockData
+    if (selfBlockStyle.load && selfBlockStyle.load.initDom) {
+        selfBlockStyle.load.initDom(blockData,dom,blockId,true)
+    }
     for (const inputKey in blockData.inputs) {
         let inputData = blockData.inputs[inputKey]
         if (inputData.value) {
@@ -38,6 +38,7 @@ const load = (blockId, blocksDataToLoad, dom) => {
 
 
             })
+
             dom.querySelector(`[inputid="${inputKey}"]`).appendChild(
             load(
                     inputData.value.data,

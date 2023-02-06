@@ -16,7 +16,7 @@ export default {
         return `Math.abs(${inputs.arg});${inputs.next}`
     },
     load:{
-        initDom(blockData,dom,blockId,firstTime=false) {
+        initDom(blockData,dom,blockId,firstTime) {
             // firstTime : 当copy时是false，当load是true
             let addItem = (inputName,change=true)=>{
                 let inputDom = document.createElement('template')
@@ -28,6 +28,7 @@ export default {
                 dom.querySelector('[id="inputs"]').appendChild(inputDom.content)                
             }
             if (firstTime) {
+                debugger
                 dom.querySelector('[id="inputs"]').innerHTML = ''
                 for (let inputName in blockData.inputs) {
                     addItem(inputName,false)
