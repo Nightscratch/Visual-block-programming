@@ -1,7 +1,6 @@
 import html from './html.html?raw'
 
 export default {
-    isTopLevel: false,
     defaultInput: null,
     topOnly:true,
 
@@ -17,17 +16,17 @@ export default {
     },
     save: {
         toFile(blockData, dom) {
-            blockData.number = dom.querySelector('[id="input"]').value
+            blockData.self.number = dom.querySelector('[id="input"]').value
             return blockData
         },
     },
     load: {
         toJson(blockData) {
-            delete blockData.number
+            delete blockData.self.number
             return blockData
         },
         changeDom(blockData, dom) {
-            dom.querySelector('[id="input"]').value = blockData.number
+            dom.querySelector('[id="input"]').value = blockData.self.number
             return dom
         }
     }

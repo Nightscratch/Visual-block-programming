@@ -1,7 +1,6 @@
 import html from './html.html?raw'
 
 export default {
-    isTopLevel:false,
     defaultInput:'next',
     topOnly:false,
     html(blockId){

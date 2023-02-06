@@ -94,7 +94,7 @@ export const connectBlocks = (dragBlockId, connect = true) => {
     let dragBlockDom = getBlockById(dragBlockId)
     for (let targetBlockId in blocksData) {
         let targetBlockData = blocksData[targetBlockId]
-        if (targetBlockId == dragBlockId || !targetBlockData.defaultInput) {
+        if (targetBlockId == dragBlockId) {
             continue
         }
         for (const dragBlockInputId in blocksData[dragBlockId].inputs) {
@@ -154,6 +154,7 @@ export const connectBlocks = (dragBlockId, connect = true) => {
         return a.distance - b.distance
     });
     let NowCanConnectBlock = NowCanConnectBlocks[0]
+    //console.log("connect",NowCanConnectBlock)
     /*if (! connect) {
         return NowCanConnectBlock
     }*/
@@ -181,9 +182,9 @@ export const connectBlocks = (dragBlockId, connect = true) => {
                 if (defaultInput != 'next' && !blocksData[dragBlockId].inputs[defaultInput].value) {
                     // 默认输入口无积木
                     document.querySelector(`[prentId="${dragBlockId}"][inputId="${defaultInput}"]`).appendChild(oldBlockDom)
-                    blocksData[dragBlockId].inputs[defaultInput].value ={
-                        type:1,
-                        data:oldBlockId
+                    blocksData[dragBlockId].inputs[defaultInput].value = {
+                        type: 1,
+                        data: oldBlockId
                     }
                     blocksData[oldBlockId].prent = {
                         inputId: defaultInput,
@@ -196,8 +197,8 @@ export const connectBlocks = (dragBlockId, connect = true) => {
                     // 默认输入口有积木
                     document.querySelector(`[prentId="${minChildId}"][inputId="next"]`).appendChild(oldBlockDom)
                     blocksData[minChildId].inputs.next.value = {
-                        type:1,
-                        data:oldBlockId
+                        type: 1,
+                        data: oldBlockId
                     }
                     blocksData[oldBlockId].prent = {
                         inputId: 'next',
@@ -208,6 +209,7 @@ export const connectBlocks = (dragBlockId, connect = true) => {
                     }
                 }
             } else {
+
                 if (blocksData[oldBlockId].defaultInput) {
                     if (blocksData[dragBlockId].defaultInput) {
 
@@ -224,11 +226,11 @@ export const connectBlocks = (dragBlockId, connect = true) => {
                                 // 默认输入有积木
                                 prentId = minChildId
                                 defaultInput = 'next'
-                            }else{
+                            } else {
                                 // 默认输入唔积木
                                 prentId = dragBlockId
                             }
-                            
+
                         }
                         document.querySelector(`[prentId="${prentId}"][inputId="${defaultInput}"]`).appendChild(oldBlockDom)
 
@@ -241,7 +243,7 @@ export const connectBlocks = (dragBlockId, connect = true) => {
                         oldBlockDom.onmousedown = (e) => {
                             setDragOut(e, oldBlockId, prentId, defaultInput)
                         }
-                        
+
                     } else {
                         if (!connect) {
                             targetBlockInputDom.append(porDom)
@@ -266,9 +268,11 @@ export const connectBlocks = (dragBlockId, connect = true) => {
                     oldBlockDom.setAttribute('class', 'block')
                     dragElement(oldBlockDom, connectBlocks)
                 }
-
+                debugger
             }
+
         }
+        debugger
         if (!connect) {
             targetBlockInputDom.append(porDom)
             return true
@@ -380,12 +384,20 @@ export const addBlock = (type, changeBlocksData = true, id) => {
         {
             type,
             inputs: blockStyle[type].inputs(),
-            isTopLevel: blockStyle[type].isTopLevel,
+            blockId:domId,
             defaultInput: blockStyle[type].defaultInput,
-            topOnly: blockStyle[type].topOnly
+            topOnly: blockStyle[type].topOnly,
+            self:{}
         }
+        initDom(dom,domId,type)
     }
     return dom
+}
+
+const initDom = (dom,domId,type) => {
+    if (blockStyle[type].load && blockStyle[type].load.changeDom) {
+        blockStyle[type].load.changeDom(blocksData[domId],dom)
+    }
 }
 
 /**
@@ -457,7 +469,9 @@ const copyBlock = (targetBlockId) => {
     codeSpace.appendChild(newBlockDom)
     for (const blockIdToCopy of data) {
         let toCopyData = blocksData[blockIdToCopy]
-        blocksData[String(Number(blockIdToCopy) + baseId)] = deepClone(toCopyData)
+        let newData = deepClone(toCopyData)
+        blockStyle[toCopyData.type].save.toFile(newData,newBlockDom)
+        blocksData[String(Number(blockIdToCopy) + baseId)] = newData
 
         let newBlock = blocksData[String(Number(blockIdToCopy) + baseId)]
 
@@ -485,6 +499,7 @@ const copyBlock = (targetBlockId) => {
 
         change(`[blockid="${blockIdToCopy}"]`, 'blockid', (newBlockDomToChange) => {
             let data = blocksData[String(Number(blockIdToCopy) + baseId)]
+            
             if (blockIdToCopy == targetBlockId) {
                 newBlockDomToChange.setAttribute('class', 'block')
                 dragElement(newBlockDomToChange, connectBlocks)
@@ -493,6 +508,8 @@ const copyBlock = (targetBlockId) => {
                     setDragOut(e, String(Number(blockIdToCopy) + baseId), data.prent.blockId, data.prent.inputId)
                 }
             }
+            //console.log(newBlockDomToChange,String(Number(blockIdToCopy) + baseId),data.type)
+            initDom(newBlockDomToChange,String(Number(blockIdToCopy) + baseId),data.type)
             newBlockDomToChange.oncontextmenu = (e) => {
                 setContext(e, String(Number(blockIdToCopy) + baseId))
             }
@@ -504,6 +521,7 @@ const copyBlock = (targetBlockId) => {
                 newBlock.inputs[inputKey].value.data = String(Number(newBlock.inputs[inputKey].value.data) + baseId)
             }
         }
+        
     }
 }
 
