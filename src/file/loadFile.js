@@ -1,4 +1,3 @@
-import { blocksData,setBlocksData, cleanBlocksData } from "../blocksData"
 import blockStyle from "../blockStyle"
 import { addBlock, addInputBlock,bindEvent } from "../block"
 let blocksDataToChange = {}

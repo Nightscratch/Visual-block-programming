@@ -11,6 +11,9 @@ export default {
         return {   
         }
     },
+    initialSelfData:{
+        text:'默认文本'
+    },
     compiler(inputs,blockData,dom){
         return `"${dom.querySelector('[id="input"]').value}"`
     },

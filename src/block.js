@@ -408,8 +408,12 @@ export const addBlock = (type, changeBlocksData = true, id) => {
 			inputs: blockStyle[type].inputs(),
 			defaultInput: blockStyle[type].defaultInput,
 			topOnly: blockStyle[type].topOnly,
-			self: {}
 		}
+        if (blockStyle[type].initialSelfData) {
+            blocksData[domId].self = blockStyle[type].initialSelfData
+        }else{
+            blocksData[domId].self = {}
+        }
 		initDom(dom, domId, type, true)
 	}
 	return dom

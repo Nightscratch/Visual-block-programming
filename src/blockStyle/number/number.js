@@ -14,6 +14,9 @@ export default {
     compiler(inputs, blockData, dom) {
         return `${dom.querySelector('[id="input"]').value}`
     },
+    initialSelfData:{
+        number:123456
+    },
     save: {
         toFile(blockData, dom) {
             blockData.self.number = dom.querySelector('[id="input"]').value
