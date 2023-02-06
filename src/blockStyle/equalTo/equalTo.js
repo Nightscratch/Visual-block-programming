@@ -32,7 +32,7 @@ export default {
             }
             dom.querySelector('[id="subtract"]').onclick = () => {
                 let inputKeys = Object.keys(blockData.inputs)
-                if (inputKeys.length > 1) {
+                if (inputKeys.length > 0) {
                     let inputData = blockData.inputs[inputKeys[inputKeys.length-1]]
                     if (inputData.value) {
                         deletBlock(inputData.value.data)
