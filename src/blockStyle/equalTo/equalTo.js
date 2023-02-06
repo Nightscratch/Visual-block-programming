@@ -25,7 +25,20 @@ export default {
                     blockData.inputs[inputName] = { type:0, value:null }
                 }
                 
-                dom.querySelector('[id="inputs"]').appendChild(inputDom.content)                
+                dom.querySelector(`[id="inputs"][prentId="${blockId}"]`).appendChild(inputDom.content)                
+            }
+            let subtractItem = ()=>{
+                let inputKeys = Object.keys(blockData.inputs)
+                if (inputKeys.length > 0) {
+                    let inputData = blockData.inputs[inputKeys[inputKeys.length-1]]
+                    if (inputData.value) {
+                        deletBlock(inputData.value.data)
+                    }
+                    dom.querySelector(`[group="${inputKeys[inputKeys.length-1]}"][prentId="${blockId}"]`).remove()
+                    delete blockData.inputs[inputKeys[inputKeys.length-1]]
+                    console.log(blockData.inputs)
+                    
+                }
             }
             if (firstTime) {
                 debugger
@@ -35,22 +48,12 @@ export default {
                 }                
             }
 
-            
             dom.querySelector('[id="add"]').onclick = () => {
                 addItem(`item_${Object.keys(blockData.inputs).length + 1}`)
             }
-            dom.querySelector('[id="subtract"]').onclick = () => {
-                let inputKeys = Object.keys(blockData.inputs)
-                if (inputKeys.length > 0) {
-                    let inputData = blockData.inputs[inputKeys[inputKeys.length-1]]
-                    if (inputData.value) {
-                        deletBlock(inputData.value.data)
-                    }
-                    dom.querySelector(`[group="${inputKeys[inputKeys.length-1]}"]`).remove()
-                    delete blockData.inputs[inputKeys[inputKeys.length-1]]
-                    console.log(blockData.inputs)
-                    
-                }
+            dom.querySelector('[id="subtract"]').onclick = (e) => {
+                console.log(e.target)
+                subtractItem()
             }
         }        
     }
