@@ -1,11 +1,11 @@
 {
   "name": "visual_editor",
-  "version": "1.0.1",
-  "main": "./build/vb.umd.js",
+  "version": "1.0.2",
+  "main": "./package/vb.umd.js",
   "type": "module",
   "exports": {
-    "require": "./dist/vb.cjs.js",
-    "import": "./build/vb.es.js"
+    "require": "./package/vb.cjs.js",
+    "import": "./package/vb.es.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
