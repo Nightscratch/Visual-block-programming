@@ -1,6 +1,6 @@
 {
   "name": "visual_editor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "./build/vb.umd.js",
   "type": "module",
   "exports": {
