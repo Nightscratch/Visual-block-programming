@@ -1,6 +1,6 @@
 #zoom{
-    width: 800px;
-    height: 500px;
+    width: 100vw;
+    height: calc(100vh - 45px);
     background-color: rgb(133, 167, 197);
     position: relative;
     overflow: scroll;

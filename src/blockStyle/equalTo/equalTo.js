@@ -29,7 +29,7 @@ export default {
                     blockData.inputs[inputName] = { type:0, value:null }
                 }
                 
-                dom.querySelector(`[id="inputs"][prentId="${blockId}"]`).appendChild(inputDom.content)                
+                dom.querySelector(`[id="inputs"]`).appendChild(inputDom.content)                
             }
             let subtractItem = ()=>{
                 let inputKeys = Object.keys(blockData.inputs)
@@ -40,8 +40,6 @@ export default {
                     }
                     dom.querySelector(`[group="${inputKeys[inputKeys.length-1]}"][prentId="${blockId}"]`).remove()
                     delete blockData.inputs[inputKeys[inputKeys.length-1]]
-                    console.log(blockData.inputs)
-                    
                 }
             }
             if (firstTime) {
@@ -56,7 +54,6 @@ export default {
                 addItem(`item_${Object.keys(blockData.inputs).length + 1}`)
             }
             dom.querySelector(`[id="subtract"]`).onclick = (e) => {
-                console.log(e.target)
                 subtractItem()
             }
         }        
