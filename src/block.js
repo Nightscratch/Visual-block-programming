@@ -384,7 +384,6 @@ export const addBlock = (type, changeBlocksData = true, id) => {
         {
             type,
             inputs: blockStyle[type].inputs(),
-            blockId:domId,
             defaultInput: blockStyle[type].defaultInput,
             topOnly: blockStyle[type].topOnly,
             self:{}
@@ -396,7 +395,7 @@ export const addBlock = (type, changeBlocksData = true, id) => {
 
 const initDom = (dom,domId,type) => {
     if (blockStyle[type].load && blockStyle[type].load.changeDom) {
-        blockStyle[type].load.changeDom(blocksData[domId],dom)
+        blockStyle[type].load.changeDom(blocksData[domId],dom,domId)
     }
 }
 
@@ -470,9 +469,13 @@ const copyBlock = (targetBlockId) => {
     for (const blockIdToCopy of data) {
         let toCopyData = blocksData[blockIdToCopy]
         let newData = deepClone(toCopyData)
-        blockStyle[toCopyData.type].save.toFile(newData,newBlockDom)
-        blocksData[String(Number(blockIdToCopy) + baseId)] = newData
 
+        
+        blocksData[String(Number(blockIdToCopy) + baseId)] = newData
+        //blocksData.blockId = String(Number(blockIdToCopy) + baseId)
+        if (blockStyle[toCopyData.type].save && blockStyle[toCopyData.type].save.toFile) {
+            blockStyle[toCopyData.type].save.toFile(newData,newBlockDom)
+        } 
         let newBlock = blocksData[String(Number(blockIdToCopy) + baseId)]
 
         let domToQuery = document.createElement("div");

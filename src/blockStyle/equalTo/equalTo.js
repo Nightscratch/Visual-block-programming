@@ -16,19 +16,24 @@ export default {
         return `Math.abs(${inputs.arg});${inputs.next}`
     },
     load:{
-        changeDom(blockData,dom) {
-            let addItem = (inputName)=>{
+        changeDom(blockData,dom,blockId) {
+            debugger
+            let addItem = (inputName,change=true)=>{
                 let inputDom = document.createElement('template')
-                inputDom.innerHTML = inputHtml.replace(/argId/g, inputName).replace(/blockId/g, blockData.blockId)
-                blockData.inputs[inputName] = { type:0, value:null }
-
+                inputDom.innerHTML = inputHtml.replace(/argId/g, inputName).replace(/blockId/g, blockId)
+                if (change) {
+                    blockData.inputs[inputName] = { type:0, value:null }
+                }
+                
                 dom.querySelector('[id="inputs"]').appendChild(inputDom.content)                
             }
+            dom.querySelector('[id="inputs"]').innerHTML = ''
             for (let inputName in blockData.inputs) {
-                addItem(inputName)
+                addItem(inputName,false)
             }
+            
             dom.querySelector('[id="add"]').onclick = () => {
-                addItem(`item_${Object.keys(blockData.inputs).length + 2}`)
+                addItem(`item_${Object.keys(blockData.inputs).length + 1}`)
             }
             dom.querySelector('[id="subtract"]').onclick = () => {
                 let inputKeys = Object.keys(blockData.inputs)

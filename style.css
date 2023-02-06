@@ -69,9 +69,9 @@
     min-width: 20px;
 }
 input{
-    width: 50px;
+    max-width: 80px;
     border-radius: 20px;
-    background-color: rgb(255, 0, 0);
+    background-color: rgb(117, 82, 82);
     color: white;
 }
 .report-only{
