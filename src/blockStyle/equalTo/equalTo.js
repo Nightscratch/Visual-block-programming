@@ -13,7 +13,11 @@ export default {
         }
     },
     compiler(inputs, blockData) {
-        return `Math.abs(${inputs.arg});${inputs.next}`
+        let arr = ''
+        for (const item in inputs) {
+            arr += inputs[item] + ','
+        }
+        return `[${arr}]`
     },
     load:{
         initDom(blockData,dom,blockId,firstTime) {
@@ -34,7 +38,7 @@ export default {
                     if (inputData.value) {
                         deletBlock(inputData.value.data)
                     }
-                    dom.querySelector(`[inputId="${inputKeys[inputKeys.length-1]}"][prentId="${blockId}"]`).remove()
+                    dom.querySelector(`[group="${inputKeys[inputKeys.length-1]}"][prentId="${blockId}"]`).remove()
                     delete blockData.inputs[inputKeys[inputKeys.length-1]]
                     console.log(blockData.inputs)
                     

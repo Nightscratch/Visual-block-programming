@@ -208,6 +208,8 @@ export const connectBlocks = (dragBlockId, connect = true) => {
                         setDragOut(e, oldBlockId, minChildId, 'next')
                     }
                 }
+
+                
             } else {
 
                 if (blocksData[oldBlockId].defaultInput) {
@@ -446,9 +448,9 @@ export const deletBlock = (targetBlockId) => {
  */
 const setPostiton = (dom, attribute) => {
     if (attribute == 'x') {
-        return dom.getBoundingClientRect().x + document.getElementById('zoom').scrollLeft / zoom
+        return dom.getBoundingClientRect().x - codeSpace.getBoundingClientRect().x + document.getElementById('zoom').scrollLeft / zoom
     } else {
-        return dom.getBoundingClientRect().y + document.getElementById('zoom').scrollTop / zoom
+        return dom.getBoundingClientRect().y - codeSpace.getBoundingClientRect().y + document.getElementById('zoom').scrollTop / zoom
     }
 }
 /**
@@ -517,9 +519,12 @@ const copyBlock = (targetBlockId) => {
                 setContext(e, String(Number(blockIdToCopy) + baseId))
             }
         })
+
         changeMultiple(`[dragid="${blockIdToCopy}"]`, 'dragid')
         for (const inputKey in newBlock.inputs) {
             changeMultiple(`[prentid="${blockIdToCopy}"][inputId="${inputKey}"]`, 'prentid')
+            changeMultiple(`[prentid="${blockIdToCopy}"][group="${inputKey}"]`, 'prentid')
+
             if (newBlock.inputs[inputKey].value) {
                 newBlock.inputs[inputKey].value.data = String(Number(newBlock.inputs[inputKey].value.data) + baseId)
             }
@@ -578,7 +583,6 @@ export const init = (codeSpaceDom) => {
     menu = {}
     porDom = document.getElementById('porDom');
     porDom.remove()
-    console.log(porDom)
     codeSpace.onmousedown = (e) => {
         if (e.target.getAttribute('id') == 'menuItem') {
             return null;
