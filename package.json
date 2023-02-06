@@ -1,16 +1,21 @@
 {
   "name": "visual_editor",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "./build/vb.umd.js",
   "type": "module",
+  "exports": {
+    "require": "./dist/vb.cjs.js",
+    "import": "./build/vb.es.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "docs": "jsdoc -c jsdoc.json",
-    "build": "vite build",
+    "build": "vite build --config vite.config.js",
+    "lib": "vite build --config vite.config.lib.js",
     "start" : "vite"
   },
-  "keywords": [],
+  "keywords": ["visual","language"],
   "author": "NIGHTS",
   "license": "MIT",
-  "description": ""
+  "description": "Visual programming language, similar to scratch and blockly"
 }

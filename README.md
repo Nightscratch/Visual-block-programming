@@ -17,11 +17,16 @@
 npm run start
 ```
 
-build
+构建
 ```
 npm run build
 ```
  
+构建包
+```
+npm run lib
+```
+
  ## 修改积木 / 增加积木
 
  在`./src/blockStyle`，积木编译成其他语言也是在这个目录里
