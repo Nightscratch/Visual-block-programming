@@ -22,10 +22,6 @@ export default {
     },
 
     load:{
-        toJson(blockData){
-            delete blockData.self.text
-            return blockData
-        },
         initDom(blockData, dom) {
             dom.querySelector('[id="input"]').value = blockData.self.text
             return dom

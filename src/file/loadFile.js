@@ -15,9 +15,6 @@ const load = (blockId, blocksDataToLoad, dom) => {
     delete blockData.x
     delete blockData.y
 
-    if (selfBlockStyle.load && selfBlockStyle.load.toJson) {
-        selfBlockStyle.load.toJson(blockData)
-    }
     blocksDataToChange[blockId] = blockData
     if (selfBlockStyle.load && selfBlockStyle.load.initDom) {
         selfBlockStyle.load.initDom(blockData,dom,blockId,true)

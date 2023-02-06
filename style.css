@@ -16,6 +16,7 @@
     background-color: rgb(255, 255, 255);
     min-height: 20px;
     min-width: 20px;
+    display: inline-block;
     border: 1px solid #000;
 }
 
