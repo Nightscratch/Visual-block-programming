@@ -34,7 +34,7 @@ export default {
                     if (inputData.value) {
                         deletBlock(inputData.value.data)
                     }
-                    dom.querySelector(`[group="${inputKeys[inputKeys.length-1]}"][prentId="${blockId}"]`).remove()
+                    dom.querySelector(`[inputId="${inputKeys[inputKeys.length-1]}"][prentId="${blockId}"]`).remove()
                     delete blockData.inputs[inputKeys[inputKeys.length-1]]
                     console.log(blockData.inputs)
                     
@@ -42,16 +42,16 @@ export default {
             }
             if (firstTime) {
                 debugger
-                dom.querySelector(`[id="inputs"][prentId="${blockId}"]`).innerHTML = ''
+                dom.querySelector(`[id="inputs"]`).innerHTML = ''
                 for (let inputName in blockData.inputs) {
                     addItem(inputName,false)
                 }                
             }
 
-            dom.querySelector(`[id="add"][prentId="${blockId}"]`).onclick = () => {
+            dom.querySelector(`[id="add"]`).onclick = () => {
                 addItem(`item_${Object.keys(blockData.inputs).length + 1}`)
             }
-            dom.querySelector(`[id="subtract"][prentId="${blockId}"]`).onclick = (e) => {
+            dom.querySelector(`[id="subtract"]`).onclick = (e) => {
                 console.log(e.target)
                 subtractItem()
             }
