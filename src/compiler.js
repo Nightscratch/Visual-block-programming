@@ -1,13 +1,18 @@
 import blockStyle from "./blockStyle/index";
 var blocksData = {}
 
-const compileBlock = (blockData,blocksId)=>{
+const compileBlock = (blockData,blocksId,isInput)=>{
     let selfBlockStyle =blockStyle[ blockData.type]
     let inputs = {}
     for (const inputkey in blockData.inputs) {
         let inputData = blockData.inputs[inputkey]
         if (inputData.value) {
-            inputs[inputkey] = compileBlock(blocksData[inputData.value.data],inputData.value.data,false)
+            inputs[inputkey] = compileBlock(blocksData[inputData.value.data],inputData.value.data,inputData.type == 0)
+            if (inputData.value && blocksData[inputData.value.data].defaultInput && inputData.type == 0) {
+                // 这代表是一个语句积木
+                inputs[inputkey] = `()=>{${inputs[inputkey]}}`
+            }
+            //debugger
         }else{
             if (inputkey == 'next') {
                 inputs[inputkey] = ''
@@ -16,7 +21,7 @@ const compileBlock = (blockData,blocksId)=>{
             }
         }
     }
-    return selfBlockStyle.compiler(inputs,blockData,document.querySelector(`[blockid="${blocksId}"]`))
+    return selfBlockStyle.compiler(inputs,blockData,document.querySelector(`[blockid="${blocksId}"]`),isInput)
 }
 
 const compile = (blocksDataInput)=>{
@@ -25,7 +30,7 @@ const compile = (blocksDataInput)=>{
     for (const blocksId in blocksData) {
         let blockData = blocksData[blocksId]
         if (blockStyle[blockData.type].isTopLevel) {
-            sourceCode += compileBlock(blockData,blocksId)
+            sourceCode += compileBlock(blockData,blocksId,false)
         }
     }
     return sourceCode

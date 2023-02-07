@@ -22,7 +22,7 @@ export default {
             },  
         }
     },
-    compiler(inputs,blockData){
+    compiler(inputs,blockData,isInput){
         return `move(${inputs.arg1},${inputs.arg2});${inputs.next}`
     }
 }
