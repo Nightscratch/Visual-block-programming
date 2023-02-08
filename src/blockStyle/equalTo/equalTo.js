@@ -8,10 +8,7 @@ export default {
     html(blockId) {
         return html.replace(/blockId/g, blockId)
     },
-    inputs() {
-        return {
-        }
-    },
+    inputs: {},
     compiler(inputs, blockData) {
         let arr = ''
         for (const item in inputs) {

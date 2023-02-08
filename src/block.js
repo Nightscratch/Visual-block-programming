@@ -9,6 +9,14 @@ import {
 import * as compiler from './compiler'
 import * as file from './file'
 
+
+/*
+* input type
+* 0:input-block
+* 1:block
+*/
+
+
 /** @constant { Number } blockMinSpace 积木连接最小距离*/
 const blockMinSpace = 20
 /** @constant { HTMLElement } codeSpace 积木编程区 html 对象 */
@@ -111,6 +119,9 @@ export const connectBlocks = (dragBlockId, connect = true) => {
 			if (dragBlockInputId != 'next' && blocksData[dragBlockId].inputs[dragBlockInputId].value) {
 				continue
 			}
+			//if ( blockStyle[blocksData[dragBlockId].type]) {
+			//	
+			//}
 			let targetBlockDom = getBlockById(targetBlockId)
 			let dragBlockInputDom = document.querySelector(`[prentId="${dragBlockId}"][inputId="${dragBlockInputId}"]`)
 			let distanceX = Math.abs(targetBlockDom.getBoundingClientRect()
@@ -136,6 +147,10 @@ export const connectBlocks = (dragBlockId, connect = true) => {
 				continue
 			}
 			if (blocksData[dragBlockId].topOnly && targetBlockData.inputs[targetBlockInputIndex].type == 1) {
+				continue
+			}
+			let targetBlockStyle = blockStyle[targetBlockData.type]
+			if ( targetBlockStyle.inputCheack && targetBlockStyle.inputCheack(targetBlockInputIndex,targetBlockData,blocksData[dragBlockId])) {
 				continue
 			}
 
@@ -215,8 +230,7 @@ export const connectBlocks = (dragBlockId, connect = true) => {
 					setDragOut(e, oldBlockId, minChildId, defaultInput)
 				}
 			} else {
-				if (blocksData[oldBlockId].defaultInput) {
-					if (blocksData[dragBlockId].defaultInput) {
+				if (blocksData[oldBlockId].defaultInput && blocksData[dragBlockId].defaultInput) {
 						if (!connect) {
 							targetBlockInputDom.insertBefore(porDom, targetBlockInputDom.childNodes[0])
 							return true
@@ -251,19 +265,6 @@ export const connectBlocks = (dragBlockId, connect = true) => {
 						oldBlockDom.onmousedown = (e) => {
 							setDragOut(e, oldBlockId, prentId, defaultInput)
 						}
-
-					} else {
-						if (!connect) {
-							targetBlockInputDom.append(porDom)
-							return true
-						}
-						oldBlockDom.style.top = setPostiton(oldBlockDom, 'y') + 20 + "px";
-						oldBlockDom.style.left = setPostiton(oldBlockDom, 'x') + 20 + "px";
-						codeSpace.appendChild(oldBlockDom)
-						delete blocksData[oldBlockId].prent
-						oldBlockDom.setAttribute('class', 'block')
-						dragElement(oldBlockDom, connectBlocks)
-					}
 				} else {
 					if (!connect) {
 						targetBlockInputDom.append(porDom)
@@ -276,11 +277,8 @@ export const connectBlocks = (dragBlockId, connect = true) => {
 					oldBlockDom.setAttribute('class', 'block')
 					dragElement(oldBlockDom, connectBlocks)
 				}
-				debugger
 			}
-
 		}
-		debugger
 		if (!connect) {
 			targetBlockInputDom.append(porDom)
 			return true
@@ -363,7 +361,6 @@ export const addInputBlock = (type, id = Object.keys(blocksData)
  * @param { String } id 积木 id
  */
 export const addBlock = (type, changeBlocksData = true, id) => {
-
 	let dom;
 	if (changeBlocksData) {
 		dom = createBlockDom(type)
@@ -381,7 +378,7 @@ export const addBlock = (type, changeBlocksData = true, id) => {
 
 		blocksData[domId] = {
 			type,
-			inputs: blockStyle[type].inputs(),
+			inputs: blockStyle[type].inputs,
 			defaultInput: blockStyle[type].defaultInput,
 			topOnly: blockStyle[type].topOnly,
 		}
@@ -511,7 +508,7 @@ const copyBlock = (targetBlockId) => {
 		}
 
 		change(`[blockid="${blockIdToCopy}"]`, 'blockid', (newBlockDomToChange) => {
-			debugger
+			
 			let data = blocksData[String(Number(blockIdToCopy) + baseId)]
 
 			if (blockIdToCopy == targetBlockId) {

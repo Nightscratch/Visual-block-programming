@@ -7,9 +7,7 @@ export default {
     html(blockId){
         return html.replace(/blockId/g,blockId)
     },
-    inputs() {
-        return {   
-        }
+    inputs: {
     },
     initialSelfData:{
         text:'默认文本'

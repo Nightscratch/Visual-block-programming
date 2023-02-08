@@ -6,8 +6,7 @@ export default {
     html(blockId){
         return html.replace(/blockId/g,blockId)
     },
-    inputs() {
-        return {
+    inputs:{
             'arg1': {
                 type:0,
                 value: null
@@ -20,7 +19,6 @@ export default {
                 type:1,
                 value: null
             },  
-        }
     },
     compiler(inputs,blockData,isInput){
         return `move(${inputs.arg1},${inputs.arg2});${inputs.next}`

@@ -7,9 +7,7 @@ export default {
     html(blockId) {
         return html.replace(/blockId/g, blockId)
     },
-    inputs() {
-        return {
-        }
+    inputs: {
     },
     compiler(inputs, blockData, dom) {
         return `${dom.querySelector('[id="input"]').value}`
