@@ -1,5 +1,7 @@
 # Visual block programming
 
+# 这个写的不好！！！我正在重新写！！！！！！！！！！！！！！！！！！！！
+
 
 一个可视化编程语言，类似[blockly](https://github.com/google/blockly)。压缩后仅 13kb
 
